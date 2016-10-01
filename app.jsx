@@ -115,6 +115,7 @@ function Player(props) {
   return (
     <div className="player">
       <div className="player-name">
+        <a className="remove-player" onClick={props.onRemove}>&times;</a>
         {props.name}
       </div>
       <div className="player-score">

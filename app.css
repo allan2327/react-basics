@@ -218,6 +218,11 @@ body {
     text-transform: uppercase;
   }
 
+  .add-player-form input[type=submit]:focus {
+    outline: none;
+  }
+
+
   .add-player-form input[type=submit]:hover{
     background: #4b71b5;
     color: #fafafa;

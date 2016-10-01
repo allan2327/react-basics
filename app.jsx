@@ -25,13 +25,22 @@ var nextId = 5;
 
 
 var Stopwatch = React.createClass({
+  getInitialState: function() {
+    return {
+      running: false,
+    }
+  },
   render: function() {
     return (
       <div className="stopwatch">
         <h2>Stopwatch</h2>
         <div className="stopwatch-time">0</div>
-        <button>Start</button>
-        <button>Stop</button>
+        { this.state.running ?
+          <button>Stop</button>
+          :
+          <button>Start</button>
+        }
+        <button>Reset</button>
       </div>
     );
   }

@@ -114,7 +114,10 @@ body {
 
   .player-name {
     flex-grow: 1;
-    padding: 20px 10px 10px 10px;
+    padding: 20px 0 10px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .player-score {

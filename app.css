@@ -120,6 +120,7 @@ body {
     white-space: nowrap;
   }
 
+
   .player-score {
     width: 190px;
     /*background: blue;*/
@@ -140,6 +141,7 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    outline: none;
   }
 
   .counter-action.increment {

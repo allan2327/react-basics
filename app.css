@@ -222,7 +222,6 @@ body {
     outline: none;
   }
 
-
   .add-player-form input[type=submit]:hover{
     background: #4b71b5;
     color: #fafafa;

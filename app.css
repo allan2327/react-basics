@@ -76,6 +76,10 @@ body {
     text-transform: uppercase;
   }
 
+  .stopwatch button:focus {
+    outline: none;
+  }
+
   .stopwatch button:hover {
     background: #4b71b5;
     color: #fafafa;

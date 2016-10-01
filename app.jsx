@@ -20,6 +20,7 @@ var PLAYERS = [
     id: 4,
   },
 ];
+var nextId = 5;
 
 
 
@@ -38,7 +39,8 @@ var AddPlayerForm = React.createClass({
   },
   onSubmit: function(e) {
     e.preventDefault();
-    // this.props.onAdd();
+    this.props.onAdd(this.state.name);
+    this.setState({name: ""});
   },
   render: function() {
     return (
@@ -153,6 +155,16 @@ var Application = React.createClass({
     this.state.players[index].score += delta;
     this.setState(this.state);
   },
+  onPlayerAdd: function(name) {
+    console.log('Player added:', name);
+    this.state.players.push({
+      name: name,
+      score: 0,
+      id: nextId,
+    });
+    this.setState(this.state);
+    nextId += 1;
+  },
   render: function() {
     return (
       <div className="scoreboard">
@@ -169,7 +181,7 @@ var Application = React.createClass({
             );
           }.bind(this))}
         </div>
-        <AddPlayerForm />
+        <AddPlayerForm onAdd={this.onPlayerAdd} />
       </div>
     );
   }

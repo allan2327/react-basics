@@ -1,70 +1,108 @@
 var PLAYERS = [
   {
-    name: "James Cool",
+    name: "J. Cool",
     score: 33,
     id: 1,
   },
   {
     name: "John Stamos",
-    score: 666,
+    score: 35,
     id: 2,
   },
   {
-    name: "Madonna",
-    score: 40,
+    name: "Feminist Loser",
+    score: 42,
     id: 3,
   },
-  {
-    name: "Feminist Loser",
-    score: 0,
-    id: 4,
-  },
 ];
-var nextId = 5;
-
-
+var nextId = 4;
 
 var Stopwatch = React.createClass({
   getInitialState: function() {
     return {
       running: false,
+      elapsedTime: 0,
+      previousTime: 0,
     }
   },
+
+  componentDidMount: function() {
+    this.interval = setInterval(this.onTick, 100);
+  },
+
+  componentWillUnmount: function() {
+    clearInterval(this.interval);
+  },
+
+  onTick: function() {
+    if (this.state.running) {
+      var now = Date.now();
+      this.setState({
+        previousTime: now,
+        elapsedTime: this.state.elapsedTime + (now - this.state.previousTime),
+      });
+    }
+    console.log('onTick');
+  },
+
+  onStart: function() {
+    this.setState({
+      running: true,
+      previousTime: Date.now(),
+    });
+  },
+
+  onStop: function() {
+    this.setState({ running: false });
+  },
+
+  onReset: function() {
+    this.setState({
+      elapsedTime: 0,
+      previousTime: Date.now(),
+    });
+  },
+
   render: function() {
+    var seconds = Math.floor(this.state.elapsedTime / 1000);
     return (
       <div className="stopwatch">
         <h2>Stopwatch</h2>
-        <div className="stopwatch-time">0</div>
+        <div className="stopwatch-time">{seconds}</div>
         { this.state.running ?
-          <button>Stop</button>
+          <button onClick={this.onStop}>Stop</button>
           :
-          <button>Start</button>
+          <button onClick={this.onStart}>Start</button>
         }
-        <button>Reset</button>
+        <button onClick={this.onReset}>Reset</button>
       </div>
     );
   }
 });
 
-
-
 var AddPlayerForm = React.createClass({
   propTypes: {
     onAdd: React.PropTypes.func.isRequired,
   },
+
   getInitialState: function() {
     return {
       name: "",
     };
   },
+
   onNameChange: function(e) {
     this.setState({name: e.target.value});
   },
+
   onSubmit: function(e) {
     e.preventDefault();
+
     this.props.onAdd(this.state.name);
     this.setState({name: ""});
   },
+
+
   render: function() {
     return (
       <div className="add-player-form">
@@ -77,13 +115,12 @@ var AddPlayerForm = React.createClass({
   }
 });
 
-
-
 function Stats(props) {
   var totalPlayers = props.players.length;
-  var totalPoints = props.players.reduce(function(total, player) {
+  var totalPoints = props.players.reduce(function(total, player){
     return total + player.score;
-  }, 0)
+  }, 0);
+
   return (
     <table className="stats">
       <tbody>
@@ -97,13 +134,12 @@ function Stats(props) {
         </tr>
       </tbody>
     </table>
-  );
+  )
 }
+
 Stats.propTypes = {
   players: React.PropTypes.array.isRequired,
 };
-
-
 
 function Header(props) {
   return (
@@ -114,32 +150,32 @@ function Header(props) {
     </div>
   );
 }
+
 Header.propTypes = {
   title: React.PropTypes.string.isRequired,
   players: React.PropTypes.array.isRequired,
 };
 
-
 function Counter(props) {
   return (
     <div className="counter">
-      <button className="counter-action decrement" onClick={function() {props.onChange(-1);}}> - </button>
+      <button className="counter-action decrement" onClick={function() {props.onChange(-1);}} > - </button>
       <div className="counter-score"> {props.score} </div>
-      <button className="counter-action increment" onClick={function() {props.onChange(+1);}}> + </button>
+      <button className="counter-action increment" onClick={function() {props.onChange(1);}}> + </button>
     </div>
   );
 }
+
 Counter.propTypes = {
   score: React.PropTypes.number.isRequired,
   onChange: React.PropTypes.func.isRequired,
 }
 
-
 function Player(props) {
   return (
     <div className="player">
       <div className="player-name">
-        <a className="remove-player" onClick={props.onRemove}>&times;</a>
+        <a className="remove-player" onClick={props.onRemove}>✖</a>
         {props.name}
       </div>
       <div className="player-score">
@@ -148,12 +184,13 @@ function Player(props) {
     </div>
   );
 }
+
 Player.propTypes = {
   name: React.PropTypes.string.isRequired,
   score: React.PropTypes.number.isRequired,
   onScoreChange: React.PropTypes.func.isRequired,
   onRemove: React.PropTypes.func.isRequired,
-}
+};
 
 
 
@@ -166,23 +203,25 @@ var Application = React.createClass({
       id: React.PropTypes.number.isRequired,
     })).isRequired,
   },
+
   getDefaultProps: function() {
     return {
-        title: "Scoreboard",
+      title: "Scoreboard",
     }
   },
+
   getInitialState: function() {
     return {
       players: this.props.initialPlayers,
     };
   },
+
   onScoreChange: function(index, delta) {
-    console.log('onScoreChange', index, delta);
     this.state.players[index].score += delta;
     this.setState(this.state);
   },
+
   onPlayerAdd: function(name) {
-    console.log('Player added:', name);
     this.state.players.push({
       name: name,
       score: 0,
@@ -191,10 +230,12 @@ var Application = React.createClass({
     this.setState(this.state);
     nextId += 1;
   },
+
   onRemovePlayer: function(index) {
     this.state.players.splice(index, 1);
     this.setState(this.state);
   },
+
   render: function() {
     return (
       <div className="scoreboard">
@@ -204,11 +245,11 @@ var Application = React.createClass({
           {this.state.players.map(function(player, index) {
             return (
               <Player
-                onScoreChange={function(delta) {this.onScoreChange(index, delta)}.bind(this)}
+                onScoreChange={function(delta) {this.onScoreChange(index ,delta)}.bind(this)}
                 onRemove={function() {this.onRemovePlayer(index)}.bind(this)}
                 name={player.name}
                 score={player.score}
-                key={player.id}/>
+                key={player.id} />
             );
           }.bind(this))}
         </div>
@@ -217,6 +258,7 @@ var Application = React.createClass({
     );
   }
 });
+
 
 
 ReactDOM.render(<Application initialPlayers={PLAYERS}/>, document.getElementById('container'));
